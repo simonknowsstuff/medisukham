@@ -1,3 +1,12 @@
+---
+title: OCR Medicines Extractor API
+emoji: 💊
+colorFrom: blue
+colorTo: green
+sdk: docker
+pinned: false
+---
+
 ## Medisukham
 A FastAPI-based service that:
 Accepts prescription images.
