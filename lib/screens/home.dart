@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medisukham/screens/camera.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -66,7 +67,12 @@ class CameraCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkResponse(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CameraScreen()),
+        );
+      },
       child: Card(
           child: Padding(
             padding: const EdgeInsets.all(32.0,),
