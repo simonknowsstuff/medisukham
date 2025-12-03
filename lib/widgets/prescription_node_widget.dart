@@ -3,9 +3,13 @@ import '../models/prescription_node.dart';
 
 class PrescriptionNodeWidget extends StatefulWidget {
   final PrescriptionNode node;
-  // final Function(PrescriptionNode) onUpdate;
+  final VoidCallback onDelete;
 
-  const PrescriptionNodeWidget({super.key, required this.node});
+  const PrescriptionNodeWidget({
+    super.key,
+    required this.node,
+    required this.onDelete,
+  });
 
   @override
   State<PrescriptionNodeWidget> createState() => _PrescriptionNodeWidgetState();
@@ -115,6 +119,21 @@ class _PrescriptionNodeWidgetState extends State<PrescriptionNodeWidget> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             _buildTimingsChips(),
+
+            // 4. Delete button
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.delete_forever),
+                label: const Text("Delete"),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.red,
+                  side: const BorderSide(color: Colors.redAccent),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+                onPressed: widget.onDelete,
+              ),
+            ),
           ],
         ),
       ),

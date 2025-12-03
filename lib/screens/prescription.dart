@@ -49,6 +49,27 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
     return '';
   }
 
+  PrescriptionNode _createNewPrescriptionNode() {
+    return PrescriptionNode(
+      medicineName: 'Sample Medicine',
+      startDate: DateTime.now(),
+      days: 1,
+      timings: [],
+    );
+  }
+
+  void _addPrescriptionNode() {
+    setState(() {
+      _medicationNodes.add(_createNewPrescriptionNode());
+    });
+  }
+
+  void _deletePrescriptionNode(PrescriptionNode nodeToDelete) {
+    setState(() {
+      _medicationNodes.remove(nodeToDelete);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,8 +78,6 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            if (widget.imageFile != null)
-              Image.file(widget.imageFile!, height: 200),
             Expanded(
               child:
                   _isLoading // If loading,
@@ -85,7 +104,10 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                       itemCount: _medicationNodes.length,
                       itemBuilder: (context, index) {
                         final node = _medicationNodes[index];
-                        return PrescriptionNodeWidget(node: node);
+                        return PrescriptionNodeWidget(
+                          node: node,
+                          onDelete: () => _deletePrescriptionNode(node),
+                        );
                       },
                     ),
             ),
@@ -97,6 +119,13 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
           ],
         ),
       ),
+      floatingActionButton: !_isLoading
+          ? FloatingActionButton(
+              onPressed: _addPrescriptionNode,
+              tooltip: 'Add new prescription',
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 
