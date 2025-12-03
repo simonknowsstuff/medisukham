@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medisukham/screens/camera.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -15,24 +14,17 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: 20.0,
-            children: [
-              CameraCard(),
-              CreateManualCard(),
-            ],
+            children: [CameraCard(), CreateManualCard()],
           ),
         ),
       ),
-      appBar: AppBar(
-        title: Text('Home',),
-      ),
+      appBar: AppBar(title: Text('Home')),
     );
   }
 }
 
 class CreateManualCard extends StatelessWidget {
-  const CreateManualCard({
-    super.key,
-  });
+  const CreateManualCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,29 +32,21 @@ class CreateManualCard extends StatelessWidget {
       onTap: () {},
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(32.0,),
+          padding: const EdgeInsets.all(32.0),
           child: Column(
             children: [
-              Icon(
-                Icons.create,
-                size: 80,
-              ),
-              Text(
-                'Enter manually',
-                style: TextStyle(fontSize: 20.0,),
-              ),
+              Icon(Icons.create, size: 80),
+              Text('Enter manually', style: TextStyle(fontSize: 20.0)),
             ],
-          )
-        )
-      )
+          ),
+        ),
+      ),
     );
   }
 }
 
 class CameraCard extends StatelessWidget {
-  const CameraCard({
-    super.key,
-  });
+  const CameraCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,21 +58,15 @@ class CameraCard extends StatelessWidget {
         );
       },
       child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(32.0,),
-            child: Column(
-              children: [
-                Icon(
-                  Icons.camera_alt_rounded,
-                  size: 80,
-                ),
-                Text(
-                  'Scan prescription',
-                  style: TextStyle(fontSize: 20.0,),
-                ),
-              ],
-            ),
-          )
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            children: [
+              Icon(Icons.camera_alt_rounded, size: 80),
+              Text('Scan prescription', style: TextStyle(fontSize: 20.0)),
+            ],
+          ),
+        ),
       ),
     );
   }

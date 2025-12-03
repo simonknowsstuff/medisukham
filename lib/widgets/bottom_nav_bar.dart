@@ -25,7 +25,7 @@ class BottomNavBar extends StatelessWidget {
           selectedIcon: Icon(Icons.alarm),
           icon: Icon(Icons.alarm_outlined),
           label: 'Alarms',
-        )
+        ),
       ],
     );
   }

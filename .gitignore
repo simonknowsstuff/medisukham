@@ -46,6 +46,7 @@ app.*.map.json
 
 # Ignore file with debug key
 /lib/debug_secret.dart
+/lib/firebase_options.dart
 
 # Ignore unwanted stuff under functions
 /functions/node_modules/

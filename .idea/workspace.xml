@@ -9,38 +9,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="294a080b-5319-42af-befb-3a535bae1e36" name="Changes" comment="Implemented cloud functions, added prescription node widget">
-      <change afterPath="$PROJECT_DIR$/android/app/google-services.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/app/src/main/kotlin/com/mediteam/medisukham/MainActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/devtools_options.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/firebase.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/functions/.eslintrc.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/functions/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/functions/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/functions/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/functions/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/api_key.dart" afterDir="false" />
+    <list default="true" id="294a080b-5319-42af-befb-3a535bae1e36" name="Changes" comment="Implemented cloud functions, added prescription node widget, formatted code">
       <change afterPath="$PROJECT_DIR$/lib/debug_secret.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/firebase_options.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/models/prescription_node.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/services/gemini_api_service.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/widgets/prescription_node_widget.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/kotlin/com/example/medisukham/MainActivity.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/android/settings.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/firebase_options.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/firebase_options.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/screens/alarms.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/alarms.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/camera.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/camera.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/screens/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/prescription.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/prescription.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/widgets/bottom_nav_bar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/bottom_nav_bar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +46,9 @@
     &quot;accountId&quot;: &quot;a2c1e63e-1230-4282-b8ee-05ebc963572f&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -162,8 +142,17 @@
       <workItem from="1764667020691" duration="5914000" />
       <workItem from="1764694113902" duration="989000" />
       <workItem from="1764695602067" duration="1685000" />
-      <workItem from="1764759081174" duration="12145000" />
+      <workItem from="1764759081174" duration="12502000" />
     </task>
+    <task id="LOCAL-00001" summary="Implemented cloud functions, added prescription node widget, formatted code">
+      <option name="closed" value="true" />
+      <created>1764777668441</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1764777668441</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,6 +160,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Implemented cloud functions, added prescription node widget" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented cloud functions, added prescription node widget" />
+    <MESSAGE value="Implemented cloud functions, added prescription node widget, formatted code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented cloud functions, added prescription node widget, formatted code" />
   </component>
 </project>

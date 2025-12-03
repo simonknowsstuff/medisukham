@@ -6,12 +6,8 @@ class AlarmScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text("Alarm Screen!",),
-      ),
-      appBar: AppBar(
-        title: Text('Alarms',),
-      ),
+      body: Center(child: Text("Alarm Screen!")),
+      appBar: AppBar(title: Text('Alarms')),
     );
   }
 }
