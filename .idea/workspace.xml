@@ -9,13 +9,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="294a080b-5319-42af-befb-3a535bae1e36" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/screens/camera.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screens/prescription.dart" afterDir="false" />
+    <list default="true" id="294a080b-5319-42af-befb-3a535bae1e36" name="Changes" comment="Implemented cloud functions, added prescription node widget">
+      <change afterPath="$PROJECT_DIR$/android/app/google-services.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/app/src/main/kotlin/com/mediteam/medisukham/MainActivity.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/devtools_options.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/firebase.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/functions/.eslintrc.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/functions/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/functions/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/functions/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/functions/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/api_key.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/debug_secret.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/firebase_options.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/models/prescription_node.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/services/gemini_api_service.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/widgets/prescription_node_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/kotlin/com/example/medisukham/MainActivity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/android/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/alarms.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/alarms.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/camera.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/camera.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/screens/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/prescription.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/prescription.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/widgets/bottom_nav_bar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/bottom_nav_bar.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
@@ -76,6 +99,12 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documents\projects\medisukham" />
+      <recent name="D:\Documents\projects\medisukham\assets\models" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
       <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
@@ -104,10 +133,44 @@
       <workItem from="1761230916118" duration="3000" />
       <workItem from="1761318049417" duration="4858000" />
       <workItem from="1761456026899" duration="6867000" />
+      <workItem from="1761581054851" duration="655000" />
+      <workItem from="1761627239271" duration="4474000" />
+      <workItem from="1761676438028" duration="1666000" />
+      <workItem from="1761714310340" duration="6142000" />
+      <workItem from="1761727965694" duration="9489000" />
+      <workItem from="1762014710661" duration="818000" />
+      <workItem from="1762233737152" duration="1185000" />
+      <workItem from="1762281228456" duration="324000" />
+      <workItem from="1762322323754" duration="13542000" />
+      <workItem from="1762352203264" duration="9595000" />
+      <workItem from="1762370608430" duration="1340000" />
+      <workItem from="1763303816976" duration="846000" />
+      <workItem from="1763391450155" duration="1916000" />
+      <workItem from="1763475674345" duration="2695000" />
+      <workItem from="1763634430401" duration="596000" />
+      <workItem from="1763701407073" duration="1913000" />
+      <workItem from="1763706953257" duration="855000" />
+      <workItem from="1763707839948" duration="78000" />
+      <workItem from="1763707932329" duration="3298000" />
+      <workItem from="1763823370379" duration="6984000" />
+      <workItem from="1763884062845" duration="3559000" />
+      <workItem from="1763916441126" duration="4000" />
+      <workItem from="1764492039885" duration="8111000" />
+      <workItem from="1764502238598" duration="1000" />
+      <workItem from="1764502787014" duration="8795000" />
+      <workItem from="1764562245807" duration="13134000" />
+      <workItem from="1764667020691" duration="5914000" />
+      <workItem from="1764694113902" duration="989000" />
+      <workItem from="1764695602067" duration="1685000" />
+      <workItem from="1764759081174" duration="12145000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Implemented cloud functions, added prescription node widget" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented cloud functions, added prescription node widget" />
   </component>
 </project>

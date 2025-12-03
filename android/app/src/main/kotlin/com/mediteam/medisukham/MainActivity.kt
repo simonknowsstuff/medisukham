@@ -1,4 +1,4 @@
-package com.example.medisukham
+package com.mediteam.medisukham
 
 import io.flutter.embedding.android.FlutterActivity
 

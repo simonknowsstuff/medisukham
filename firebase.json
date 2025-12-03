@@ -1,0 +1,22 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "medisukham-f9840",
+          "appId": "1:524142780998:android:f52063453dd6106e72a047",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "medisukham-f9840",
+          "configurations": {
+            "android": "1:524142780998:android:f52063453dd6106e72a047",
+            "ios": "1:524142780998:ios:6f22cdf47123102972a047"
+          }
+        }
+      }
+    }
+  }
+}

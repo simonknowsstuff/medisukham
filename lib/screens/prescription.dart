@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:medisukham/widgets/prescription_node_widget.dart';
+import 'package:medisukham/models/prescription_node.dart';
+import 'package:medisukham/services/gemini_api_service.dart';
 
 class PrescriptionScreen extends StatefulWidget {
   final File? imageFile;
@@ -13,10 +15,10 @@ class PrescriptionScreen extends StatefulWidget {
 
 class _PrescriptionScreenState extends State<PrescriptionScreen> {
   bool _isLoading = false;
-  String _recognizedText = 'No text detected yet.';
+  List<PrescriptionNode> _medicationNodes = [];
+  String? _errorMessage;
 
-  final TextEditingController _medicineNameController = TextEditingController();
-  final TextEditingController _dosageController = TextEditingController();
+  final TextEditingController _progressController = TextEditingController();
 
   @override
   void initState() {
@@ -26,73 +28,86 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
     }
   }
 
-  Future<void> _processImage(File image) async {
-    // TODO: LLM pipeline
-    // This is responsible for handling the OCR + LLM pipeline on the image
-    // and reflecting those results on the editable text fields
-    setState(() => _isLoading = true);
+  Future<String> _processImage(File image) async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
 
-    final InputImage inputImage = InputImage.fromFile(image);
-    final TextRecognizer textRecognizer = TextRecognizer(
-      script: TextRecognitionScript.latin,
-    );
+    PrescriptionAnalysisResult result = await GeminiApiService.instance
+        .scanPrescription(image);
 
-    final RecognizedText recognizedText = await textRecognizer.processImage(
-      inputImage,
-    );
-
-    String text = recognizedText.text;
-    _medicineNameController.text = 'Still to be processed :P';
-    _dosageController.text = 'Still to be processed :P';
-    _recognizedText = recognizedText.text;
-
-    textRecognizer.close();
-    setState(() => _isLoading = false);
+    setState(() {
+      _isLoading = false;
+      if (result.isSuccess) {
+        _medicationNodes = result.nodes!;
+      } else {
+        _errorMessage = result.errorMessage;
+        _medicationNodes = [];
+      }
+    });
+    return '';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Prescription')),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  if (widget.imageFile != null)
-                    Image.file(widget.imageFile!, height: 200),
-                  TextField(
-                    controller: _medicineNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Medicine Name',
-                    ),
-                  ),
-                  TextField(
-                    controller: _dosageController,
-                    decoration: const InputDecoration(labelText: 'Dosage'),
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: SelectableText(
-                          _recognizedText,
-                          style: const TextStyle(fontSize: 16),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            if (widget.imageFile != null)
+              Image.file(widget.imageFile!, height: 200),
+            Expanded(
+              child:
+                  _isLoading // If loading,
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    ) // Display indicator, else
+                  : _errorMessage !=
+                        null // If there's an error message
+                  ? Center(
+                      // Display error message, else
+                      child: Text(
+                        'Error: $_errorMessage',
+                        style: TextStyle(color: Colors.red),
                       ),
+                    )
+                  : _medicationNodes
+                        .isEmpty // If there's no medication nodes
+                  ? Center(
+                      child: Text('No prescriptions found in the image'),
+                    ) // Display error, else
+                  : ListView.builder(
+                      // Display all prescription nodes
+                      padding: EdgeInsets.zero,
+                      itemCount: _medicationNodes.length,
+                      itemBuilder: (context, index) {
+                        final node = _medicationNodes[index];
+                        return PrescriptionNodeWidget(node: node);
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _savePrescription,
-                    child: const Text('Save Prescription'),
-                  ),
-                ],
-              ),
             ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _savePrescription,
+              child: const Text('Save Prescription'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   void _savePrescription() {
     // TODO: Implement prescription saving
     throw UnimplementedError();
+  }
+
+  @override
+  void dispose() {
+    _progressController.dispose();
+    super.dispose();
   }
 }

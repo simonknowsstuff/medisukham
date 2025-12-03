@@ -43,3 +43,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Ignore file with debug key
+/lib/debug_secret.dart
+
+# Ignore unwanted stuff under functions
+/functions/node_modules/
+/functions/*.local
+/functions/.env
