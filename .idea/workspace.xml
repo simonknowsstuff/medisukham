@@ -9,15 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="294a080b-5319-42af-befb-3a535bae1e36" name="Changes" comment="Implemented cloud functions, added prescription node widget, formatted code">
-      <change afterPath="$PROJECT_DIR$/lib/debug_secret.dart" afterDir="false" />
+    <list default="true" id="294a080b-5319-42af-befb-3a535bae1e36" name="Changes" comment="Some more stuff">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/firebase_options.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/firebase_options.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/alarms.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/alarms.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screens/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/widgets/bottom_nav_bar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/widgets/bottom_nav_bar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/google-services.json" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/google-services.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/api_key.dart" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,25 +56,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "Flutter.main.dart.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "io.flutter.reload.alreadyRun": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Documents\projects\medisukham" />
@@ -142,7 +139,7 @@
       <workItem from="1764667020691" duration="5914000" />
       <workItem from="1764694113902" duration="989000" />
       <workItem from="1764695602067" duration="1685000" />
-      <workItem from="1764759081174" duration="12502000" />
+      <workItem from="1764759081174" duration="12961000" />
     </task>
     <task id="LOCAL-00001" summary="Implemented cloud functions, added prescription node widget, formatted code">
       <option name="closed" value="true" />
@@ -152,7 +149,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764777668441</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Some more stuff">
+      <option name="closed" value="true" />
+      <created>1764778076904</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1764778076904</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -161,6 +166,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Implemented cloud functions, added prescription node widget" />
     <MESSAGE value="Implemented cloud functions, added prescription node widget, formatted code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented cloud functions, added prescription node widget, formatted code" />
+    <MESSAGE value="Some more stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="Some more stuff" />
   </component>
 </project>

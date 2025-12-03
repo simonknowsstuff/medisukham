@@ -16,7 +16,7 @@ migrate_working_dir/
 *.iml
 *.ipr
 *.iws
-.idea/
+/.idea/
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -44,9 +44,10 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Ignore file with debug key
+# Ignore stuff with secrets or API keys
 /lib/debug_secret.dart
 /lib/firebase_options.dart
+/android/app/google-services.json
 
 # Ignore unwanted stuff under functions
 /functions/node_modules/
