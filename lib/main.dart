@@ -2,9 +2,15 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'app.dart';
 import 'firebase_options.dart';
 import 'debug_secret.dart'; // File contains debug key for cloud functions.
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +39,22 @@ Future<void> main() async {
   //   FirebaseFunctions.instance.useFunctionsEmulator(host, 5001);
   //   await FirebaseAuth.instance.useAuthEmulator(host, 9099);
   // }
+
+  // Local notifications setup:
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >()
+      ?.requestNotificationsPermission();
+  const AndroidInitializationSettings androidInitializationSettings =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: androidInitializationSettings,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  // Timezone Initialisation:
+  tz.initializeTimeZones();
 
   runApp(const MyApp());
 }

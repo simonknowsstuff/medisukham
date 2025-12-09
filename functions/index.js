@@ -54,6 +54,33 @@ const generationConfig = {
   },
 };
 
+/**
+ * Recursively converts all keys within an object or array of objects from snake_case to camelCase.
+ * * This function traverses the input structure:
+ * 1. If the input is a primitive type (string, number, boolean) or null, it returns the input unchanged.
+ * 2. If the input is an array, it applies the conversion to every element.
+ * 3. If the input is an object, it converts keys (e.g., 'medicine_name' -> 'medicineName') and recursively
+ * calls itself on the corresponding values.
+ *
+ * @param {object | Array<object> | string | number | boolean | null} o The input object, array, or primitive value.
+ * @return {object | Array<object> | string | number | boolean | null} The object or array with keys converted to camelCase.
+ */
+function keysToCamel(o) {
+  if (o === null || typeof o !== "object") {
+    return o;
+  }
+
+  if (Array.isArray(o)) {
+    return o.map(keysToCamel);
+  }
+
+  return Object.keys(o).reduce((newO, k) => {
+    const newKey = k.replace(/(_\w)/g, (m) => m[1].toUpperCase());
+    newO[newKey] = keysToCamel(o[k]);
+    return newO;
+  }, {});
+}
+
 exports.generateContentWithGemini = onCall(
     {enforceAppCheck: true, secrets: ["GEMINI_API_KEY"]},
     async (request) => {
@@ -81,7 +108,12 @@ exports.generateContentWithGemini = onCall(
           config: generationConfig,
         });
 
-        return {result: response.text};
+        // Convert from snake case to camel case:
+        const snakeCaseObject = JSON.parse(response.text);
+        const camelCaseObject = keysToCamel(snakeCaseObject);
+        const finalJSONString = JSON.stringify(camelCaseObject);
+
+        return {result: finalJSONString};
       } catch (error) {
         console.error("Gemini call failed for user", userId, error);
         throw new HttpsError(

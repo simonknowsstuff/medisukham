@@ -95,9 +95,6 @@ class GeminiApiService {
         'prompt': prompt,
       });
       final jsonString = result.data['result'] as String;
-      if (kDebugMode) {
-        print(jsonString);
-      }
 
       final List<dynamic> rawList = jsonDecode(jsonString);
 
@@ -105,7 +102,7 @@ class GeminiApiService {
           .where((jsonItem) => jsonItem != null)
           .map((jsonItem) {
             if (jsonItem is Map<String, dynamic>) {
-              return PrescriptionNode.fromJson(jsonItem);
+              return PrescriptionNode.fromJsonGemini(jsonItem);
             }
             throw FormatException('Prescription node is not in proper format.');
           })
