@@ -54,24 +54,71 @@ class _CameraScreenState extends State<CameraScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Take a Photo')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 20.0,
-          children: [
-            _imageFile != null
-                ? Image.file(_imageFile!, height: 300)
-                : const Text('No image captured yet.'),
-            ElevatedButton.icon(
-              onPressed: () => _pickImage(context, ImageSource.camera),
-              icon: const Icon(Icons.camera_alt),
-              label: const Text('Capture from camera'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => _pickImage(context, ImageSource.gallery),
-              icon: const Icon(Icons.photo_library),
-              label: const Text('Pick from gallery'),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 20.0,
+            children: [
+              Card(
+                child: InkWell(
+                  onTap: () {
+                    _pickImage(context, ImageSource.camera);
+                  },
+                  child: const ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 16.0,
+                    ),
+                    leading: Icon(Icons.camera_alt),
+                    title: Text(
+                      'Capture from Camera',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Read prescription image directly from your camera.',
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 16.0),
+                  ),
+                ),
+              ),
+              Card(
+                child: InkWell(
+                  onTap: () {
+                    _pickImage(context, ImageSource.gallery);
+                  },
+                  child: const ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 16.0,
+                    ),
+                    leading: Icon(Icons.photo_library),
+                    title: Text(
+                      'Open from Gallery',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Read prescription image from your gallery.',
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios, size: 16.0),
+                  ),
+                ),
+              ),
+              const Text(
+                'WARNING: You will be prompted to crop the image you select. '
+                'Make sure you crop out personally identifiable information from your image. '
+                'By selecting one of the above options, '
+                'you consent to your prescription being sent to Google Gemini for OCR and data extraction purposes.',
+                style: TextStyle(color: Colors.redAccent, fontSize: 18.0),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'package:medisukham/models/prescription_node.dart';
 import 'package:medisukham/services/alarm_persistence_service.dart';
 import 'package:medisukham/widgets/prescription_node_widget.dart';
 import 'package:medisukham/services/permission_service.dart';
+import 'package:medisukham/app.dart';
 
 class AlarmScreen extends StatefulWidget {
   const AlarmScreen({super.key});
@@ -120,12 +121,23 @@ class _AlarmScreenState extends State<AlarmScreen> {
     setState(() => _isLoading = false);
   }
 
+  void _goBackHome() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MainPage(initialIndex: 0),
+      ),
+      // Stop removing routes only when stack is empty:
+          (Route<dynamic> route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        body: Center(child: CircularProgressIndicator()),
         appBar: AppBar(title: Text('All Medication Reminders')),
+        body: Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -135,10 +147,15 @@ class _AlarmScreenState extends State<AlarmScreen> {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.check_box_outline_blank, size: 40),
-              SizedBox(height: 40),
-              Text('No active prescriptions found'),
+            children: [
+              const Icon(Icons.warning, size: 40),
+              const SizedBox(height: 40),
+              const Text('No active prescriptions found'),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                  onPressed: _goBackHome,
+                  child: const Text('Go back to home'),
+              )
             ],
           ),
         ),
