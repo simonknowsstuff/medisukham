@@ -19,33 +19,44 @@ class _PrescriptionNodeWidgetState extends State<PrescriptionNodeWidget> {
   late TextEditingController _nameController;
   late TextEditingController _daysController;
 
+  Future<void> _selectTime(DosageTiming timingToEdit) async {
+    final TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: timingToEdit.toTimeOfDay(),
+    );
+
+    if (newTime != null) {
+      setState(() {
+        timingToEdit.minutesPastMidnight = newTime.hour * 60 + newTime.minute;
+      });
+    }
+  }
+
+  void _deleteTiming(DosageTiming timingToDelete) {
+    setState(() {
+      widget.node.timings.remove(timingToDelete);
+    });
+  }
+
+  void _addTiming() async {
+    final TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 9, minute: 0),
+    );
+
+    if (newTime != null) {
+      setState(() {
+        final newMinutes = newTime.hour * 60 + newTime.minute;
+        widget.node.timings.add(DosageTiming(minutesPastMidnight: newMinutes));
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.node.medicineName);
     _daysController = TextEditingController(text: widget.node.days.toString());
-  }
-
-  Widget _buildTimingsChips() {
-    return Wrap(
-      spacing: 8.0,
-      children: DosageContext.values.map((context) {
-        final isSelected = widget.node.timings.any((t) => t.context == context);
-        return ChoiceChip(
-          label: Text(context.toString().split('.').last),
-          selected: isSelected,
-          onSelected: (selected) {
-            setState(() {
-              if (selected) {
-                widget.node.timings.add(DosageTiming(context: context));
-              } else {
-                widget.node.timings.removeWhere((t) => t.context == context);
-              }
-            });
-          },
-        );
-      }).toList(),
-    );
   }
 
   @override
@@ -111,16 +122,59 @@ class _PrescriptionNodeWidgetState extends State<PrescriptionNodeWidget> {
                 ),
               ],
             ),
+
             const SizedBox(height: 12),
 
-            // 3. Timings/Context Chips
+            // 3. Dynamic Timings List and Actions
             const Text(
-              'Dosage Timings:',
+              'Scheduled Times:',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            _buildTimingsChips(),
 
-            // 4. Delete button
+            ...widget.node.timings.map((timing) {
+              return ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.alarm),
+
+                // Display the explicit time
+                title: Text(
+                  timing.toTimeOfDay().format(context),
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+
+                // Actions: Edit and Delete
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, size: 20),
+                      onPressed: () => _selectTime(timing),
+                      tooltip: 'Edit Time',
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.delete,
+                        size: 20,
+                        color: Colors.red,
+                      ),
+                      onPressed: () => _deleteTiming(timing),
+                      tooltip: 'Delete Time',
+                    ),
+                  ],
+                ),
+              );
+            }),
+
+            // Add new time:
+            TextButton.icon(
+              onPressed: _addTiming,
+              icon: const Icon(Icons.add_circle_outline),
+              label: const Text('Add New Time'),
+            ),
+
+            const SizedBox(height: 12),
+            const Divider(),
+
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(

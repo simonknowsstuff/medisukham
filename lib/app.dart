@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medisukham/models/prescription_node.dart';
+import 'package:medisukham/screens/settings_screen.dart';
 import 'package:medisukham/services/alarm_persistence_service.dart';
 import 'screens/home_screen.dart';
 import 'screens/alarms_screen.dart';
@@ -92,7 +93,11 @@ class _MainPageState extends State<MainPage> {
       );
     }
 
-    final List<Widget> barScreens = [const HomeScreen(), const AlarmScreen()];
+    final List<Widget> barScreens = [
+      const HomeScreen(),
+      const AlarmScreen(),
+      const SettingsScreen(),
+    ];
 
     return Scaffold(
       body: barScreens[_selectedIndex],

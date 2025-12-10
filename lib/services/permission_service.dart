@@ -5,11 +5,17 @@ class PermissionService {
   PermissionService._internal();
   static final PermissionService instance = PermissionService._internal();
 
-  Future<bool> ensureExactAlarmPermission(BuildContext context) async {
-    // Check status
+  Future<bool> checkExactAlarmPermission() async {
     final status = await Permission.scheduleExactAlarm.status;
 
     if (status.isGranted) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> ensureExactAlarmPermission(BuildContext context) async {
+    if (await checkExactAlarmPermission()) {
       return true;
     }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:medisukham/models/prescription_node.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,35 +29,23 @@ class AlarmPersistenceService {
     return scheduledDate;
   }
 
-  Map<String, int> _getTimeFromContext(DosageContext context) {
-    switch (context) {
-      // TODO: Give user option to modify context timings, hardcoded for now.
-      case DosageContext.Morning:
-        return {'hour': 8, 'minute': 0};
-      case DosageContext.Afternoon:
-        return {'hour': 12, 'minute': 0};
-      case DosageContext.Evening:
-        return {'hour': 18, 'minute': 0};
-      case DosageContext.Night:
-        return {'hour': 21, 'minute': 0};
-    }
-  }
-
   Future<void> savePrescriptions(List<PrescriptionNode> nodes) async {
     final List<Map<String, dynamic>> jsonList = nodes
         .map((node) => node.toJson())
         .toList();
     final String jsonString = jsonEncode(jsonList);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final prefs = SharedPreferencesAsync();
     await prefs.setString(_prescriptionsKey, jsonString);
+
     if (kDebugMode) {
       print('Saved prescriptions!');
     }
   }
 
   Future<List<PrescriptionNode>> loadPrescriptions() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? jsonString = prefs.getString(_prescriptionsKey);
+    final prefs = SharedPreferencesAsync();
+    final String? jsonString = await prefs.getString(_prescriptionsKey);
 
     if (jsonString == null) {
       return [];
@@ -90,39 +79,68 @@ class AlarmPersistenceService {
     }
   }
 
-  Future<void> scheduleAllReminders(List<PrescriptionNode> nodes) async {
+  Future<void> scheduleAllReminders(List<PrescriptionNode> medications) async {
     final FlutterLocalNotificationsPlugin plugin =
         FlutterLocalNotificationsPlugin();
     await plugin.cancelAll();
 
     int notificationId = 0;
 
-    for (final node in nodes) {
-      final timingsToSet = node.timings.isNotEmpty
-          ? node.timings
-          : [DosageTiming(context: DosageContext.Morning)];
-      for (final timing in timingsToSet) {
-        final time = _getTimeFromContext(timing.context);
-        final hour = time['hour']!;
-        final minute = time['minute']!;
+    for (var node in medications) {
+      if (node.days <= 0) continue;
 
-        await plugin.zonedSchedule(
-          notificationId++,
-          'Medication Time: ${node.medicineName}',
-          'It is time for your ${timing.context.toString().split('.').last} dose.',
-          _nextInstanceOfTime(hour, minute),
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'medisukham_channel_id',
-              'Medication Reminders',
-              channelDescription: 'Reminds for medication from Medisukham.',
-              importance: Importance.high,
-              priority: Priority.high,
-            ),
-          ),
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          matchDateTimeComponents: DateTimeComponents.time,
-        );
+      final initialDate = DateTime(
+        node.startDate.year,
+        node.startDate.month,
+        node.startDate.day,
+      );
+
+      for (var timing in node.timings) {
+        final int minutes = timing.minutesPastMidnight;
+        final int hour = minutes ~/ 60;
+        final int minute = minutes % 60;
+
+        for (int i = 0; i < node.days; i++) {
+          DateTime alarmDate = initialDate.add(Duration(days: i));
+
+          DateTime finalScheduledTime = DateTime(
+            alarmDate.year,
+            alarmDate.month,
+            alarmDate.day,
+            hour,
+            minute,
+            0,
+          );
+
+          // Scheduling:
+          // Only schedule if the time is in the future
+          if (finalScheduledTime.isAfter(DateTime.now())) {
+            // Convert the local DateTime to a time zone aware TZDateTime
+            final tz.TZDateTime scheduledTimeTZ = tz.TZDateTime.from(
+              finalScheduledTime,
+              tz.local, // Use the device's current time zone
+            );
+
+            await plugin.zonedSchedule(
+              notificationId++,
+              'Medication time: ${node.medicineName}',
+              'Take your dose now.',
+              scheduledTimeTZ,
+              const NotificationDetails(
+                android: AndroidNotificationDetails(
+                  'medisukham_alarms', // Channel ID
+                  'Medication Reminders',
+                  channelDescription: 'Reminders for scheduled doses.',
+                  importance: Importance.high,
+                  priority: Priority.high,
+                ),
+              ),
+              androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+              // Useful for daily alarms, but we are scheduling absolute times:
+              matchDateTimeComponents: DateTimeComponents.time,
+            );
+          }
+        }
       }
     }
   }

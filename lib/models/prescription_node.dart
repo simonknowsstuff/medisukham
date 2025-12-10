@@ -1,23 +1,26 @@
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-enum DosageContext { Morning, Afternoon, Evening, Night }
-
 class DosageTiming {
-  DosageContext context;
-  DosageTiming({required this.context});
+  int minutesPastMidnight;
+  DosageTiming({required this.minutesPastMidnight});
 
-  factory DosageTiming.fromJson(Map<String, dynamic> json) {
-    String contextString = json['context'] as String;
-    return DosageTiming(
-      context: DosageContext.values.firstWhere(
-        (e) => e.toString().split('.').last == contextString,
-        orElse: () => DosageContext.Morning,
-      ),
+  TimeOfDay toTimeOfDay() {
+    return TimeOfDay(
+        hour: minutesPastMidnight ~/ 60,
+        minute: minutesPastMidnight % 60,
     );
   }
 
+  static int toMinutes(TimeOfDay time) => time.hour * 60 + time.minute;
+
+  factory DosageTiming.fromJson(Map<String, dynamic> json) {
+    final int timeInt = json['minutesPastMidnight'] as int ?? 0;
+    return DosageTiming(minutesPastMidnight: timeInt);
+  }
+
   Map<String, dynamic> toJson() {
-    return {'context': context.toString().split('.').last};
+    return {'minutesPastMidnight': minutesPastMidnight };
   }
 }
 
@@ -35,6 +38,21 @@ class PrescriptionNode {
     required this.days,
     required this.timings,
   }) : id = id ?? const Uuid().v4();
+
+  static TimeOfDay _getGlobalTimeForContext(String context) {
+    switch (context) {
+      case 'Morning':
+        return const TimeOfDay(hour: 8, minute: 0);
+      case 'Afternoon':
+        return const TimeOfDay(hour: 12, minute: 0);
+      case 'Evening':
+        return const TimeOfDay(hour: 18, minute: 0);
+      case 'Night':
+        return const TimeOfDay(hour: 21, minute: 0);
+      default:
+        return const TimeOfDay(hour: 0, minute: 0);
+    }
+  }
 
   factory PrescriptionNode.fromJsonLocal(Map<String, dynamic> json) {
     final rawDays = json['days'] as int?;
@@ -77,9 +95,14 @@ class PrescriptionNode {
       throw FormatException('Medicine name is missing');
     }
 
-    final timingsList = rawTimingsList
+    final List<DosageTiming> timingsList = rawTimingsList
         .whereType<Map<String, dynamic>>()
-        .map((t) => DosageTiming.fromJson(t))
+        .map((t) {
+          final contextString = t['context'] as String ?? 'Morning';
+          final defaultTime = PrescriptionNode._getGlobalTimeForContext(contextString);
+          final minutes = defaultTime.hour * 60 + defaultTime.minute;
+          return DosageTiming(minutesPastMidnight: minutes);
+        })
         .toList();
 
     return PrescriptionNode(
