@@ -98,48 +98,44 @@ class AlarmPersistenceService {
         final int minutes = timing.minutesPastMidnight;
         final int hour = minutes ~/ 60;
         final int minute = minutes % 60;
+        final now = DateTime.now();
 
-        for (int i = 0; i < node.days; i++) {
-          DateTime alarmDate = initialDate.add(Duration(days: i));
+        DateTime scheduledTime = DateTime(
+          initialDate.year,
+          initialDate.month,
+          initialDate.day,
+          hour,
+          minute,
+          0,
+        );
 
-          DateTime finalScheduledTime = DateTime(
-            alarmDate.year,
-            alarmDate.month,
-            alarmDate.day,
-            hour,
-            minute,
-            0,
-          );
-
-          // Scheduling:
-          // Only schedule if the time is in the future
-          if (finalScheduledTime.isAfter(DateTime.now())) {
-            // Convert the local DateTime to a time zone aware TZDateTime
-            final tz.TZDateTime scheduledTimeTZ = tz.TZDateTime.from(
-              finalScheduledTime,
-              tz.local, // Use the device's current time zone
-            );
-
-            await plugin.zonedSchedule(
-              notificationId++,
-              'Medication time: ${node.medicineName}',
-              'Take your dose now.',
-              scheduledTimeTZ,
-              const NotificationDetails(
-                android: AndroidNotificationDetails(
-                  'medisukham_alarms', // Channel ID
-                  'Medication Reminders',
-                  channelDescription: 'Reminders for scheduled doses.',
-                  importance: Importance.high,
-                  priority: Priority.high,
-                ),
-              ),
-              androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-              // Useful for daily alarms, but we are scheduling absolute times:
-              matchDateTimeComponents: DateTimeComponents.time,
-            );
-          }
+        if (scheduledTime.isBefore(now)) {
+          scheduledTime = scheduledTime.add(const Duration(days: 1));
         }
+
+        final tz.TZDateTime scheduledTimeTZ = tz.TZDateTime.from(
+          scheduledTime,
+          tz.local, // Use the device's current time zone
+        );
+
+        await plugin.zonedSchedule(
+          notificationId++,
+          'Medication time: ${node.medicineName}',
+          'Take your dose now.',
+          scheduledTimeTZ,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'medisukham_alarms', // Channel ID
+              'Medication Reminders',
+              channelDescription: 'Reminders for scheduled doses.',
+              importance: Importance.max,
+              priority: Priority.max,
+            ),
+          ),
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          matchDateTimeComponents: DateTimeComponents.time,
+
+        );
       }
     }
   }
