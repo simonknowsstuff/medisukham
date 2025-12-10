@@ -50,6 +50,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
           content: Text(
             '${nodeToDelete.medicineName} deleted and alarms updated.',
           ),
+          duration: Duration(seconds: 1),
         ),
       );
     }
@@ -124,11 +125,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
   void _goBackHome() {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(
-        builder: (context) => const MainPage(initialIndex: 0),
-      ),
+      MaterialPageRoute(builder: (context) => const MainPage(initialIndex: 0)),
       // Stop removing routes only when stack is empty:
-          (Route<dynamic> route) => false,
+      (Route<dynamic> route) => false,
     );
   }
 
@@ -153,9 +152,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
               const Text('No active prescriptions found'),
               const SizedBox(height: 40),
               ElevatedButton(
-                  onPressed: _goBackHome,
-                  child: const Text('Go back to home'),
-              )
+                onPressed: _goBackHome,
+                child: const Text('Go back to home'),
+              ),
             ],
           ),
         ),

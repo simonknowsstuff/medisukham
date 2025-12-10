@@ -58,7 +58,7 @@ class _CameraScreenState extends State<CameraScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 32.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 20.0,
+            spacing: 25.0,
             children: [
               Card(
                 child: InkWell(
@@ -151,7 +151,7 @@ class PrivacyWidget extends StatelessWidget {
                   Text(
                     'Important Privacy Notice',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.w600,
                       color: Colors.redAccent,
                     ),
@@ -163,9 +163,9 @@ class PrivacyWidget extends StatelessWidget {
                         'By selecting one of the above options, you consent to your '
                         'prescription being sent to Google Gemini for OCR and data extraction.',
                     style: TextStyle(
-                      fontSize: 13.5,
+                      fontSize: 15.5,
                       height: 1.4,
-                      color: Colors.black87,
+                      color: Colors.red,
                     ),
                   ),
                 ],

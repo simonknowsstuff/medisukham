@@ -124,17 +124,20 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                       itemBuilder: (context, index) {
                         final node = _medicationNodes[index];
                         return PrescriptionNodeWidget(
+                          key: ValueKey(node.medicineName),
                           node: node,
-                          onDelete: () => _deletePrescriptionNode(node),
+                          onDelete: () {
+                            _deletePrescriptionNode(node);
+                          },
                         );
                       },
                     ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
+            !_isLoading ? ElevatedButton(
               onPressed: _savePrescription,
               child: const Text('Save Prescription'),
-            ),
+            ) : const SizedBox.shrink(),
           ],
         ),
       ),
@@ -166,32 +169,19 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
     }
 
     try {
-      // Save data:
-      await AlarmPersistenceService.instance.savePrescriptions(
-        _medicationNodes,
-      );
-
-      if (canScheduleAlarms) {
-        // Schedule alarms:
-        await AlarmPersistenceService.instance.scheduleAllReminders(
-          _medicationNodes,
-        );
-
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Prescriptions and alarms set!')),
-          );
-
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const MainPage(initialIndex: 1),
+              builder: (context) => MainPage(
+                  initialIndex: 1,
+                  nodesToMerge: _medicationNodes,
+              ),
             ),
             // Stop removing routes only when stack is empty:
             (Route<dynamic> route) => false,
           );
         }
-      }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
