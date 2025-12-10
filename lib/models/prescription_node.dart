@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 enum DosageContext { Morning, Afternoon, Evening, Night }
 
 class DosageTiming {
@@ -20,22 +22,26 @@ class DosageTiming {
 }
 
 class PrescriptionNode {
+  final String id;
   String medicineName;
   int days;
   List<DosageTiming> timings;
   DateTime startDate;
 
   PrescriptionNode({
+    String? id,
     required this.medicineName,
     required this.startDate,
     required this.days,
     required this.timings,
-  });
+  }) : id = id ?? const Uuid().v4();
 
   factory PrescriptionNode.fromJsonLocal(Map<String, dynamic> json) {
     final rawDays = json['days'] as int?;
     final rawStartDate = json['startDate'] as String?;
     final rawTimingsList = json['timings'] as List? ?? [];
+
+    final id = json['id'] as String?;
 
     final medicineName = json['medicineName'] as String?;
     if (medicineName == null || medicineName.isEmpty) {
@@ -48,6 +54,7 @@ class PrescriptionNode {
         .toList();
 
     return PrescriptionNode(
+      id: id,
       medicineName: medicineName,
       startDate: DateTime.parse(rawStartDate ?? '2000-01-01'),
       days: rawDays ?? 1, // Keep 1 as default
@@ -85,6 +92,7 @@ class PrescriptionNode {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'medicineName': medicineName,
       'startDate': startDate.toIso8601String(),
       'days': days,

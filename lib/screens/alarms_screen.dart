@@ -193,6 +193,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
               ),
               // Use the existing prescription node widget:
               PrescriptionNodeWidget(
+                key: ValueKey(node.id),
                 node: node,
                 onDelete: () => _handleNodeDeletion(node),
               ),

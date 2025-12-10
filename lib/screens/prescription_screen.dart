@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:medisukham/widgets/prescription_node_widget.dart';
 import 'package:medisukham/models/prescription_node.dart';
 import 'package:medisukham/services/gemini_api_service.dart';
-import 'package:medisukham/services/alarm_persistence_service.dart';
 import 'package:medisukham/services/permission_service.dart';
 import 'package:medisukham/app.dart';
 
@@ -124,7 +123,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                       itemBuilder: (context, index) {
                         final node = _medicationNodes[index];
                         return PrescriptionNodeWidget(
-                          key: ValueKey(node.medicineName),
+                          key: ValueKey(node.id),
                           node: node,
                           onDelete: () {
                             _deletePrescriptionNode(node);
