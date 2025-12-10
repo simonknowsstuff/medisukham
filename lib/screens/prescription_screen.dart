@@ -75,7 +75,13 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
 
   void _deletePrescriptionNode(PrescriptionNode nodeToDelete) {
     setState(() {
-      _medicationNodes.remove(nodeToDelete);
+      if (_medicationNodes.length > 1) {
+        _medicationNodes.remove(nodeToDelete);
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Alarms for ${nodeToDelete.medicineName} cannot be empty.')),
+      );
     });
   }
 
@@ -172,7 +178,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Failed to save data or set alarms: Exact Alarm Permission not granted. Please check settings.',
+              'Failed to save data or set alarms: Exact alarm permission not granted. Please check settings.',
             ),
           ),
         );

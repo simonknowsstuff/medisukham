@@ -34,7 +34,13 @@ class _PrescriptionNodeWidgetState extends State<PrescriptionNodeWidget> {
 
   void _deleteTiming(DosageTiming timingToDelete) {
     setState(() {
-      widget.node.timings.remove(timingToDelete);
+      if (widget.node.timings.length > 1) {
+        widget.node.timings.remove(timingToDelete);
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Alarms for ${widget.node.medicineName} cannot be empty.')),
+      );
     });
   }
 
