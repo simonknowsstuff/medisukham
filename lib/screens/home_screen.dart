@@ -43,8 +43,15 @@ class CameraCard extends StatelessWidget {
         },
         // ListTile provides the standard layout for an item in a list
         child: const ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
-          leading: Icon(Icons.camera_alt_rounded, size: 40.0, color: Colors.deepOrange),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 20.0,
+            horizontal: 16.0,
+          ),
+          leading: Icon(
+            Icons.camera_alt_rounded,
+            size: 40.0,
+            color: Colors.deepOrange,
+          ),
           title: Text(
             'Scan New Prescription',
             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
@@ -74,7 +81,10 @@ class CreateManualCard extends StatelessWidget {
           );
         },
         child: const ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 20.0,
+            horizontal: 16.0,
+          ),
           leading: Icon(Icons.create, size: 40.0, color: Colors.deepOrange),
           title: Text(
             'Enter Manually',

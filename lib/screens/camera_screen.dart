@@ -120,9 +120,7 @@ class _CameraScreenState extends State<CameraScreen> {
 }
 
 class PrivacyWidget extends StatelessWidget {
-  const PrivacyWidget({
-    super.key,
-  });
+  const PrivacyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +137,7 @@ class PrivacyWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(
-              Icons.privacy_tip_outlined,
-              color: Colors.redAccent,
-            ),
+            const Icon(Icons.privacy_tip_outlined, color: Colors.redAccent),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -159,9 +154,9 @@ class PrivacyWidget extends StatelessWidget {
                   SizedBox(height: 6),
                   Text(
                     'You will be prompted to crop the image you select. '
-                        'Please remove any personally identifiable information.\n\n'
-                        'By selecting one of the above options, you consent to your '
-                        'prescription being sent to Google Gemini for OCR and data extraction.',
+                    'Please remove any personally identifiable information.\n\n'
+                    'By selecting one of the above options, you consent to your '
+                    'prescription being sent to Google Gemini for OCR and data extraction.',
                     style: TextStyle(
                       fontSize: 15.5,
                       height: 1.4,

@@ -39,7 +39,11 @@ class _PrescriptionNodeWidgetState extends State<PrescriptionNodeWidget> {
         return;
       }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Alarms for ${widget.node.medicineName} cannot be empty.')),
+        SnackBar(
+          content: Text(
+            'Alarms for ${widget.node.medicineName} cannot be empty.',
+          ),
+        ),
       );
     });
   }

@@ -27,9 +27,9 @@ class BottomNavBar extends StatelessWidget {
           label: 'Alarms',
         ),
         NavigationDestination(
-            selectedIcon: Icon(Icons.settings_outlined),
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+          selectedIcon: Icon(Icons.settings_outlined),
+          icon: Icon(Icons.settings),
+          label: 'Settings',
         ),
       ],
     );

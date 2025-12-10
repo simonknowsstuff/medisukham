@@ -162,18 +162,14 @@ class _AlarmScreenState extends State<AlarmScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('All Medication Reminders'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: _isLoading ? null : _saveAllChangesAndSchedule,
-            tooltip: 'Save All Changes',
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('All Medication Reminders')),
       body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(
+          top: 16.0,
+          left: 16.0,
+          right: 16.0,
+          bottom: 60.0,
+        ),
         itemCount: _allMedications.length,
         itemBuilder: (context, index) {
           final node = _allMedications[index];
@@ -201,6 +197,12 @@ class _AlarmScreenState extends State<AlarmScreen> {
             ],
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _isLoading ? null : _saveAllChangesAndSchedule,
+        label: Text(_isLoading ? 'Saving...' : 'Save all changes'),
+        icon: const Icon(Icons.save),
+        tooltip: 'Save All Changes and Update Alarms',
       ),
     );
   }

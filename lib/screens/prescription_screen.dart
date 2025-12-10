@@ -80,7 +80,11 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
         return;
       }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Alarms for ${nodeToDelete.medicineName} cannot be empty.')),
+        SnackBar(
+          content: Text(
+            'Alarms for ${nodeToDelete.medicineName} cannot be empty.',
+          ),
+        ),
       );
     });
   }

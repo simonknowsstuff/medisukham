@@ -7,8 +7,8 @@ class DosageTiming {
 
   TimeOfDay toTimeOfDay() {
     return TimeOfDay(
-        hour: minutesPastMidnight ~/ 60,
-        minute: minutesPastMidnight % 60,
+      hour: minutesPastMidnight ~/ 60,
+      minute: minutesPastMidnight % 60,
     );
   }
 
@@ -20,7 +20,7 @@ class DosageTiming {
   }
 
   Map<String, dynamic> toJson() {
-    return {'minutesPastMidnight': minutesPastMidnight };
+    return {'minutesPastMidnight': minutesPastMidnight};
   }
 }
 
@@ -99,7 +99,9 @@ class PrescriptionNode {
         .whereType<Map<String, dynamic>>()
         .map((t) {
           final contextString = t['context'] as String;
-          final defaultTime = PrescriptionNode._getGlobalTimeForContext(contextString);
+          final defaultTime = PrescriptionNode._getGlobalTimeForContext(
+            contextString,
+          );
           final minutes = defaultTime.hour * 60 + defaultTime.minute;
           return DosageTiming(minutesPastMidnight: minutes);
         })

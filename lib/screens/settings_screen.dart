@@ -36,9 +36,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       await launchUrl(uri);
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not open $url')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not open $url')));
       }
     }
   }
@@ -46,9 +46,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         children: <Widget>[
           // SECTION 1: NOTIFICATION & ALARM SETTINGS
@@ -78,7 +76,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     : const Icon(Icons.warning, color: Colors.red),
                 onTap: () {
                   // Re-request permission or navigate to settings
-                  PermissionService.instance.ensureExactAlarmPermission(context);
+                  PermissionService.instance.ensureExactAlarmPermission(
+                    context,
+                  );
                 },
               );
             },
@@ -87,7 +87,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Automatic Cleanup Toggle
           SwitchListTile(
             title: const Text('Automatic Prescription Cleanup'),
-            subtitle: const Text('Remove expired medication after treatment days end.'),
+            subtitle: const Text(
+              'Remove expired medication after treatment days end.',
+            ),
             secondary: const Icon(Icons.cleaning_services),
             value: _isAutoCleanupEnabled!,
             onChanged: _toggleAutoCleanup,

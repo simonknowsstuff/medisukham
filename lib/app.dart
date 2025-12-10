@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  void _startInitialMerge(List <PrescriptionNode> newNodes) async {
+  void _startInitialMerge(List<PrescriptionNode> newNodes) async {
     setState(() => _isMerging = true);
 
     try {
@@ -66,15 +66,19 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> _handleIncomingMerge(List<PrescriptionNode> newNodes) async {
-    final List<PrescriptionNode> currentNodes = await AlarmPersistenceService.instance.loadPrescriptions();
+    final List<PrescriptionNode> currentNodes = await AlarmPersistenceService
+        .instance
+        .loadPrescriptions();
     final List<PrescriptionNode> mergedList = [...currentNodes, ...newNodes];
-    
+
     await AlarmPersistenceService.instance.savePrescriptions(mergedList);
     await AlarmPersistenceService.instance.scheduleAllReminders(mergedList);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Prescriptions merged and saved successfully!')),
+        const SnackBar(
+          content: Text('Prescriptions merged and saved successfully!'),
+        ),
       );
     }
   }
@@ -86,11 +90,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     if (_isMerging) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     final List<Widget> barScreens = [
