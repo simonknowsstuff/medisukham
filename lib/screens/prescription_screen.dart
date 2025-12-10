@@ -133,10 +133,12 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
                     ),
             ),
             const SizedBox(height: 20),
-            !_isLoading ? ElevatedButton(
-              onPressed: _savePrescription,
-              child: const Text('Save Prescription'),
-            ) : const SizedBox.shrink(),
+            !_isLoading
+                ? ElevatedButton(
+                    onPressed: _savePrescription,
+                    child: const Text('Save Prescription'),
+                  )
+                : const SizedBox.shrink(),
           ],
         ),
       ),
@@ -165,28 +167,28 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
       context,
     ))) {
       canScheduleAlarms = false;
-    }
 
-    try {
-        if (context.mounted) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainPage(
-                  initialIndex: 1,
-                  nodesToMerge: _medicationNodes,
-              ),
-            ),
-            // Stop removing routes only when stack is empty:
-            (Route<dynamic> route) => false,
-          );
-        }
-    } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to save data or set alarms: $e')),
+          SnackBar(
+            content: Text(
+              'Failed to save data or set alarms: Exact Alarm Permission not granted. Please check settings.',
+            ),
+          ),
         );
       }
+    }
+
+    if (context.mounted && canScheduleAlarms) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              MainPage(initialIndex: 1, nodesToMerge: _medicationNodes),
+        ),
+        // Stop removing routes only when stack is empty:
+        (Route<dynamic> route) => false,
+      );
     }
 
     setState(() => _isLoading = false);

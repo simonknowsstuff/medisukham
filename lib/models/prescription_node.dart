@@ -15,7 +15,7 @@ class DosageTiming {
   static int toMinutes(TimeOfDay time) => time.hour * 60 + time.minute;
 
   factory DosageTiming.fromJson(Map<String, dynamic> json) {
-    final int timeInt = json['minutesPastMidnight'] as int ?? 0;
+    final int timeInt = json['minutesPastMidnight'] as int;
     return DosageTiming(minutesPastMidnight: timeInt);
   }
 
@@ -98,7 +98,7 @@ class PrescriptionNode {
     final List<DosageTiming> timingsList = rawTimingsList
         .whereType<Map<String, dynamic>>()
         .map((t) {
-          final contextString = t['context'] as String ?? 'Morning';
+          final contextString = t['context'] as String;
           final defaultTime = PrescriptionNode._getGlobalTimeForContext(contextString);
           final minutes = defaultTime.hour * 60 + defaultTime.minute;
           return DosageTiming(minutesPastMidnight: minutes);

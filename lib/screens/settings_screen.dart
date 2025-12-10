@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:medisukham/services/permission_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:medisukham/models/prescription_node.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
