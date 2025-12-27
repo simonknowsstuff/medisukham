@@ -1,19 +1,28 @@
+import 'package:alarm/alarm.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:medisukham/services/gemini_api_service.dart';
+import 'package:medisukham/services/settings_service.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'app.dart';
 import 'firebase_options.dart';
 import 'debug_secret.dart'; // File contains debug key for cloud functions.
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialise settings
+  final settingsService = SettingsService();
+
+  // Initialise Gemini API Service
+  GeminiApiService.initialize(settingsService);
 
   // Initialising Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -41,17 +50,20 @@ Future<void> main() async {
   // }
 
   // Local notifications setup:
-  flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin
-      >()
-      ?.requestNotificationsPermission();
-  const AndroidInitializationSettings androidInitializationSettings =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: androidInitializationSettings,
-  );
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  // flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //       AndroidFlutterLocalNotificationsPlugin
+  //     >()
+  //     ?.requestNotificationsPermission();
+  // const AndroidInitializationSettings androidInitializationSettings =
+  //     AndroidInitializationSettings('@mipmap/ic_launcher');
+  // const InitializationSettings initializationSettings = InitializationSettings(
+  //   android: androidInitializationSettings,
+  // );
+  // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  // Initialise alarms
+  await Alarm.init();
 
   // Timezone Initialisation:
   tz.initializeTimeZones();

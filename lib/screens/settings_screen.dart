@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:medisukham/services/permission_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:medisukham/services/settings_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -11,23 +11,17 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // Example State: This should reflect the current saved preference
-  static const String _timeContextSettingsKey = 'time_context_settings';
-  static const String _autoCleanUpSettingKey = 'auto_cleanup_settings';
-  SharedPreferencesAsync sharedPrefs = SharedPreferencesAsync();
-
-  bool? _isAutoCleanupEnabled = true;
+  final SettingsService _settingsService = SettingsService();
+  late Future<Map<String, int>> _initialTimingsFuture;
 
   @override
   void initState() {
     super.initState();
+    _initialTimingsFuture = _settingsService.getAllTimings();
   }
 
-  void _toggleAutoCleanup(bool newValue) {
-    setState(() async {
-      _isAutoCleanupEnabled = newValue;
-      await sharedPrefs.setBool(_autoCleanUpSettingKey, newValue);
-    });
+  void _toggleAutoCleanup(bool newValue) async {
+    await _settingsService.setAutoCleanup(newValue);
   }
 
   Future<void> _launchUrl(String url) async {
@@ -41,6 +35,70 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ).showSnackBar(SnackBar(content: Text('Could not open $url')));
       }
     }
+  }
+
+  Future<void> _selectAndSaveTime(
+    BuildContext context,
+    String label,
+    TimeOfDay currentTime,
+  ) async {
+    final TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: currentTime,
+    );
+
+    if (newTime != null) {
+      try {
+        await _settingsService.updateTiming(label, newTime);
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '$label time updated to ${newTime.format(context)}',
+              ),
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error saving time: $e')));
+        }
+      }
+    }
+  }
+
+  Widget _buildTimingsList() {
+    const List<String> labels = ['Morning', 'Afternoon', 'Evening', 'Night'];
+
+    return ListenableBuilder(
+      listenable: SettingsService(),
+      builder: (context, child) {
+        return Column(
+          children: labels.map((label) {
+            return FutureBuilder<TimeOfDay>(
+              // Using future builder again because the getter is Future-based:
+              future: _settingsService.getTiming(label),
+              builder: (context, timeSnapshot) {
+                if (!timeSnapshot.hasData) {
+                  return const LinearProgressIndicator();
+                }
+                final currentTime = timeSnapshot.data!;
+
+                return ListTile(
+                  title: Text('$label Dose'),
+                  subtitle: Text(currentTime.format(context)),
+                  trailing: const Icon(Icons.edit),
+                  onTap: () => _selectAndSaveTime(context, label, currentTime),
+                );
+              },
+            );
+          }).toList(),
+        );
+      },
+    );
   }
 
   @override
@@ -83,31 +141,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
               );
             },
           ),
-
-          // Automatic Cleanup Toggle
-          SwitchListTile(
-            title: const Text('Automatic Prescription Cleanup'),
-            subtitle: const Text(
-              'Remove expired medication after treatment days end.',
-            ),
-            secondary: const Icon(Icons.cleaning_services),
-            value: _isAutoCleanupEnabled!,
-            onChanged: _toggleAutoCleanup,
-          ),
-
-          // Snooze Duration
-          ListTile(
-            leading: const Icon(Icons.snooze),
-            title: const Text('Snooze Duration'),
-            subtitle: const Text('Current: 5 minutes'),
-            onTap: () {
-              // TODO: Implement dialog to change snooze duration
-            },
+          
+          FutureBuilder<bool>(
+              future: _settingsService.getAutoCleanup(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const LinearProgressIndicator();
+                }
+                final isEnabled = snapshot.data!;
+                
+                return SwitchListTile(
+                    title: const Text('Automatic Prescription Cleanup'),
+                    subtitle: const Text('Remove expired medication after treatment days end.'),
+                    secondary: const Icon(Icons.cleaning_services),
+                    value: isEnabled,
+                    onChanged: _toggleAutoCleanup,
+                );
+              }
           ),
 
           const Divider(),
 
-          // SECTION 2: GENERAL & ABOUT
+          // SECTION 2: DEFAULT TIMINGS LIST
+          const Padding(
+            padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
+            child: Text(
+              'Default Dosage Timings',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.deepOrange,
+              ),
+            ),
+          ),
+
+          FutureBuilder<Map<String, int>>(
+            future: _initialTimingsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error loading timings: ${snapshot.error}'));
+              }
+              return _buildTimingsList();
+            }
+          ),
+
+          // SECTION 3: GENERAL & ABOUT
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
             child: Text(

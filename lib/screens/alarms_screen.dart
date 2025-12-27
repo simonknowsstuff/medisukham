@@ -4,6 +4,7 @@ import 'package:medisukham/services/alarm_persistence_service.dart';
 import 'package:medisukham/widgets/prescription_node_widget.dart';
 import 'package:medisukham/services/permission_service.dart';
 import 'package:medisukham/app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AlarmScreen extends StatefulWidget {
   const AlarmScreen({super.key});
@@ -15,6 +16,7 @@ class AlarmScreen extends StatefulWidget {
 class _AlarmScreenState extends State<AlarmScreen> {
   List<PrescriptionNode> _allMedications = [];
   bool _isLoading = true;
+  SharedPreferencesAsync sharedPrefs = SharedPreferencesAsync();
 
   @override
   void initState() {

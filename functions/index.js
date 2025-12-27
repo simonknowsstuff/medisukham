@@ -1,7 +1,9 @@
 const {onCall, HttpsError} = require("firebase-functions/v2/https");
-const {GoogleGenAI} = require("@google/genai");
+const {VertexAI} = require("@google-cloud/vertexai");
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const project = process.env.GCLOUD_PROJECT;
+const location = "us-central1";
+
 const generationConfig = {
   responseMimeType: "application/json",
 
@@ -82,7 +84,7 @@ function keysToCamel(o) {
 }
 
 exports.generateContentWithGemini = onCall(
-    {enforceAppCheck: true, secrets: ["GEMINI_API_KEY"]},
+    {enforceAppCheck: true, secrets: ["VERTEX_API_KEY"]},
     async (request) => {
       if (!request.auth || !request.auth.uid) {
         throw new HttpsError(
@@ -95,30 +97,49 @@ exports.generateContentWithGemini = onCall(
       const {image, prompt} = request.data;
 
       try {
-        const genai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
+        const vertexAI = new VertexAI({
+          project: project,
+          location: location,
+        });
+
+        const generativeModel = vertexAI.getGenerativeModel(
+            {
+              model: "gemini-2.5-flash-lite",
+              generationConfig: generationConfig,
+            },
+        );
+
         const imagePart = {
           inlineData: {
             data: image,
             mimeType: "image/jpeg",
           },
         };
-        const response = await genai.models.generateContent({
-          model: "gemini-2.5-flash",
-          contents: [prompt, imagePart],
-          config: generationConfig,
-        });
+
+        const result = await generativeModel.generateContent(
+            {
+              contents: [
+                {
+                  role: "user", parts: [{text: prompt}, imagePart],
+                },
+              ],
+            },
+        );
+
+        const response = result.response;
+        const text = response.candidates[0].content.parts[0].text;
 
         // Convert from snake case to camel case:
-        const snakeCaseObject = JSON.parse(response.text);
+        const snakeCaseObject = JSON.parse(text);
         const camelCaseObject = keysToCamel(snakeCaseObject);
         const finalJSONString = JSON.stringify(camelCaseObject);
 
         return {result: finalJSONString};
       } catch (error) {
-        console.error("Gemini call failed for user", userId, error);
+        console.error("Vertex AI call failed.", userId, error);
         throw new HttpsError(
             "internal",
-            "An error occurred while generating content.",
+            "Generation failed.",
             error.message,
         );
       }

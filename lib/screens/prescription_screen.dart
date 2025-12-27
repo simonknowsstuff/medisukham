@@ -59,7 +59,7 @@ class _PrescriptionScreenState extends State<PrescriptionScreen> {
       medicineName: 'Sample Medicine',
       startDate: DateTime.now(),
       days: 1,
-      timings: [],
+      timings: [DosageTiming(minutesPastMidnight: 480)],
     );
   }
 

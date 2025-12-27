@@ -39,21 +39,6 @@ class PrescriptionNode {
     required this.timings,
   }) : id = id ?? const Uuid().v4();
 
-  static TimeOfDay _getGlobalTimeForContext(String context) {
-    switch (context) {
-      case 'Morning':
-        return const TimeOfDay(hour: 8, minute: 0);
-      case 'Afternoon':
-        return const TimeOfDay(hour: 12, minute: 0);
-      case 'Evening':
-        return const TimeOfDay(hour: 18, minute: 0);
-      case 'Night':
-        return const TimeOfDay(hour: 21, minute: 0);
-      default:
-        return const TimeOfDay(hour: 0, minute: 0);
-    }
-  }
-
   factory PrescriptionNode.fromJsonLocal(Map<String, dynamic> json) {
     final rawDays = json['days'] as int?;
     final rawStartDate = json['startDate'] as String?;
@@ -96,15 +81,8 @@ class PrescriptionNode {
     }
 
     final List<DosageTiming> timingsList = rawTimingsList
-        .whereType<Map<String, dynamic>>()
-        .map((t) {
-          final contextString = t['context'] as String;
-          final defaultTime = PrescriptionNode._getGlobalTimeForContext(
-            contextString,
-          );
-          final minutes = defaultTime.hour * 60 + defaultTime.minute;
-          return DosageTiming(minutesPastMidnight: minutes);
-        })
+        .whereType<int>()
+        .map((minutes) => DosageTiming(minutesPastMidnight: minutes))
         .toList();
 
     return PrescriptionNode(

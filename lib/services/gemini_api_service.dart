@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart'; // For kDebug
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:medisukham/services/settings_service.dart';
 
 class PrescriptionAnalysisResult {
   final List<PrescriptionNode>? nodes;
@@ -30,13 +31,51 @@ Future<User?> signInAnonymously() async {
 }
 
 class GeminiApiService {
+  final SettingsService _settingsService;
+
   // Ensures only one instance of the service exists globally.
-  GeminiApiService._internal();
-  static final GeminiApiService instance = GeminiApiService._internal();
+  GeminiApiService._internal(this._settingsService);
+
+  static late final GeminiApiService instance;
+  static void initialize(SettingsService settingsService) {
+    instance = GeminiApiService._internal(settingsService);
+  }
 
   String _imageFileToBase64(File imageFile) {
     final bytes = imageFile.readAsBytesSync();
     return base64Encode(bytes);
+  }
+
+  Future<Map<String, dynamic>> _resolveTimings(
+    Map<String, dynamic> rawNodeJson,
+  ) async {
+    final Map<String, dynamic>? dosageJson = rawNodeJson['dosages'] is Map
+        ? rawNodeJson['dosages'] as Map<String, dynamic>
+        : null;
+    if (dosageJson == null) return rawNodeJson;
+
+    final rawTimingsList = dosageJson['timings'] as List ?? [];
+    final List<int> resolvedMinutesList = [];
+
+    for (var rawTimingsMap in rawTimingsList) {
+      if (rawTimingsMap is Map<String, dynamic>) {
+        final contextString = rawTimingsMap['context'] as String? ?? '';
+
+        final timeOfDay = await _settingsService.getTiming(contextString);
+
+        final minutes = timeOfDay.hour * 60 + timeOfDay.minute;
+        resolvedMinutesList.add(minutes);
+      }
+    }
+
+    // Replace old timings list with new timings
+    final updatedDosages = Map<String, dynamic>.from(dosageJson);
+    updatedDosages['timings'] = resolvedMinutesList;
+
+    final updatedNode = Map<String, dynamic>.from(rawNodeJson);
+    updatedNode['dosages'] = updatedDosages;
+
+    return updatedNode;
   }
 
   Future<PrescriptionAnalysisResult> scanPrescription(
@@ -98,15 +137,18 @@ class GeminiApiService {
 
       final List<dynamic> rawList = jsonDecode(jsonString);
 
-      final List<PrescriptionNode> nodes = rawList
-          .where((jsonItem) => jsonItem != null)
-          .map((jsonItem) {
-            if (jsonItem is Map<String, dynamic>) {
-              return PrescriptionNode.fromJsonGemini(jsonItem);
-            }
-            throw FormatException('Prescription node is not in proper format.');
-          })
-          .toList();
+      final List<PrescriptionNode> nodes = await Future.wait(
+        rawList.where((jsonItem) => jsonItem != null).map((jsonItem) async {
+          if (jsonItem is Map<String, dynamic>) {
+            final Map<String, dynamic> resolvedJson = await _resolveTimings(
+              jsonItem,
+            );
+
+            return PrescriptionNode.fromJsonGemini(resolvedJson);
+          }
+          throw FormatException('Prescription node is not in proper format');
+        }),
+      );
 
       return PrescriptionAnalysisResult(nodes: nodes);
     } on FirebaseFunctionsException catch (e) {
