@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:medisukham/models/prescription_node.dart';
 import 'package:medisukham/services/settings_service.dart';
@@ -14,22 +13,6 @@ class AlarmPersistenceService {
       AlarmPersistenceService._internal();
   final SettingsService _settingsService = SettingsService();
   static const String _prescriptionsKey = 'saved_medications';
-
-  tz.TZDateTime _nextInstanceOfTime(int hour, int minute) {
-    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      hour,
-      minute,
-    );
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    return scheduledDate;
-  }
 
   Future<void> savePrescriptions(List<PrescriptionNode> nodes) async {
     final List<Map<String, dynamic>> jsonList = nodes
@@ -87,7 +70,10 @@ class AlarmPersistenceService {
     int alarmId = 1;
     final now = DateTime.now();
 
+    final volume = await _settingsService.getVolume();
+    final hasVibrate = await _settingsService.getVibrate();
     bool isAutoCleanup = await _settingsService.getAutoCleanup();
+
     for (var node in medications) {
       if (node.days <= 0 && isAutoCleanup) continue;
 
@@ -120,9 +106,9 @@ class AlarmPersistenceService {
           dateTime: scheduledTimeTZ,
           assetAudioPath: 'assets/alarm.wav',
           loopAudio: true,
-          vibrate: true,
+          vibrate: hasVibrate,
           volumeSettings: VolumeSettings.fade(
-            volume: 0.8,
+            volume: volume,
             fadeDuration: Duration(seconds: 5),
             volumeEnforced: true,
           ),
@@ -140,14 +126,12 @@ class AlarmPersistenceService {
           if (kDebugMode) {
             print('Alarm set for: ${node.medicineName}');
           }
-        }
-        catch (e) {
+        } catch (e) {
           if (kDebugMode) {
             print('Error setting alarms: $e');
           }
           rethrow;
         }
-
       }
     }
   }

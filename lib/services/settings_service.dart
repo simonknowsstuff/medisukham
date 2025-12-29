@@ -27,9 +27,7 @@ class SettingsService extends ChangeNotifier {
 
     try {
       final Map<String, dynamic> decoded = jsonDecode(jsonString);
-      return decoded.map((key, value) =>
-        MapEntry(key, value as int)
-      );
+      return decoded.map((key, value) => MapEntry(key, value as int));
     } catch (e) {
       return Map.from(_defaultTimings);
     }
@@ -56,6 +54,26 @@ class SettingsService extends ChangeNotifier {
 
   Future<void> setAutoCleanup(bool value) async {
     await sharedPrefs.setBool(_keyAutoCleanup, value);
+    notifyListeners();
+  }
+
+  // Vibrate:
+  Future<bool> getVibrate() async {
+    return await sharedPrefs.getBool(_keyVibrate) ?? true;
+  }
+
+  Future<void> setVibrate(bool value) async {
+    await sharedPrefs.setBool(_keyVibrate, value);
+    notifyListeners();
+  }
+
+  // Volume:
+  Future<double> getVolume() async {
+    return await sharedPrefs.getDouble(_keyVolume) ?? 0.8;
+  }
+
+  Future<void> setVolume(double value) async {
+    await sharedPrefs.setDouble(_keyVolume, value);
     notifyListeners();
   }
 }
