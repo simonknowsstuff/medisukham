@@ -6,7 +6,7 @@ class SettingsService extends ChangeNotifier {
   SettingsService._internal();
   static final SettingsService _instance = SettingsService._internal();
   factory SettingsService() => _instance;
-  SharedPreferencesAsync sharedPrefs = SharedPreferencesAsync();
+  SharedPreferencesAsync _prefs = SharedPreferencesAsync();
 
   static const String _keyTimingsMap = 'timings_map';
   static const String _keyAutoCleanup = 'auto_cleanup';
@@ -20,60 +20,75 @@ class SettingsService extends ChangeNotifier {
     'Night': 1260,
   };
 
-  // Timings:
-  Future<Map<String, int>> getAllTimings() async {
-    final String? jsonString = await sharedPrefs.getString(_keyTimingsMap);
-    if (jsonString == null) return Map.from(_defaultTimings);
+  // Cache variables:
+  bool _vibrate = true;
+  bool _autoCleanup = true;
+  double _volume = 0.8;
+  Map<String, int> _timings = {};
 
-    try {
-      final Map<String, dynamic> decoded = jsonDecode(jsonString);
-      return decoded.map((key, value) => MapEntry(key, value as int));
-    } catch (e) {
-      return Map.from(_defaultTimings);
+  // Load everything into memory once (Cached implementation):
+  Future<void> init() async {
+    _vibrate = await _prefs.getBool(_keyVibrate) ?? true;
+    _autoCleanup = await _prefs.getBool(_keyAutoCleanup) ?? true;
+    _volume = await _prefs.getDouble(_keyVolume) ?? 0.8;
+
+    final String? jsonString = await _prefs.getString(_keyTimingsMap);
+    if (jsonString != null) {
+      final decoded = jsonDecode(jsonString);
+      _timings = decoded.map((k, v) => MapEntry(k, v as int));
+    } else {
+      _timings = Map.from(_defaultTimings);
     }
   }
 
-  Future<void> updateTiming(String label, TimeOfDay time) async {
-    final timings = await getAllTimings();
-    timings[label] = time.hour * 60 + time.minute;
-
-    await sharedPrefs.setString(_keyTimingsMap, jsonEncode(timings));
-    notifyListeners();
+  // Timings:
+  Map<String, int> getAllTimings() {
+    return _timings;
   }
 
-  Future<TimeOfDay> getTiming(String label) async {
-    final timings = await getAllTimings();
+  Future<void> updateTiming(String label, TimeOfDay time) async {
+    final timings = getAllTimings();
+    timings[label] = time.hour * 60 + time.minute;
+    notifyListeners();
+    await _prefs.setString(_keyTimingsMap, jsonEncode(timings));
+  }
+
+  TimeOfDay getTiming(String label) {
+    final timings = getAllTimings();
     final minutes = timings[label] ?? _defaultTimings[label] ?? 480;
     return TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
   }
 
   // Auto-Cleanup:
-  Future<bool> getAutoCleanup() async {
-    return await sharedPrefs.getBool(_keyAutoCleanup) ?? true;
+  bool getAutoCleanup() {
+    return _autoCleanup;
   }
 
   Future<void> setAutoCleanup(bool value) async {
-    await sharedPrefs.setBool(_keyAutoCleanup, value);
+    _autoCleanup = value;
     notifyListeners();
+    await _prefs.setBool(_keyAutoCleanup, value);
   }
 
   // Vibrate:
-  Future<bool> getVibrate() async {
-    return await sharedPrefs.getBool(_keyVibrate) ?? true;
+  bool getVibrate() {
+    return _vibrate;
   }
 
   Future<void> setVibrate(bool value) async {
-    await sharedPrefs.setBool(_keyVibrate, value);
+    _vibrate = value;
     notifyListeners();
+    await _prefs.setBool(_keyVibrate, value);
   }
 
   // Volume:
-  Future<double> getVolume() async {
-    return await sharedPrefs.getDouble(_keyVolume) ?? 0.8;
+  double getVolume() {
+    return _volume;
   }
 
   Future<void> setVolume(double value) async {
-    await sharedPrefs.setDouble(_keyVolume, value);
+    _volume = value;
     notifyListeners();
+    await _prefs.setDouble(_keyVolume, value);
   }
 }
