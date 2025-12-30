@@ -6,7 +6,7 @@ class SettingsService extends ChangeNotifier {
   SettingsService._internal();
   static final SettingsService _instance = SettingsService._internal();
   factory SettingsService() => _instance;
-  SharedPreferencesAsync _prefs = SharedPreferencesAsync();
+  final SharedPreferencesAsync _prefs = SharedPreferencesAsync();
 
   static const String _keyTimingsMap = 'timings_map';
   static const String _keyAutoCleanup = 'auto_cleanup';
@@ -47,10 +47,12 @@ class SettingsService extends ChangeNotifier {
   }
 
   Future<void> updateTiming(String label, TimeOfDay time) async {
-    final timings = getAllTimings();
-    timings[label] = time.hour * 60 + time.minute;
+    final updatedTimings = Map<String, int>.from(_timings); // Create new map instance
+    final int updatedMinutes = time.hour * 60 + time.minute;
+    updatedTimings[label] = updatedMinutes;
+    _timings = updatedTimings;
     notifyListeners();
-    await _prefs.setString(_keyTimingsMap, jsonEncode(timings));
+    await _prefs.setString(_keyTimingsMap, jsonEncode(updatedTimings));
   }
 
   TimeOfDay getTiming(String label) {

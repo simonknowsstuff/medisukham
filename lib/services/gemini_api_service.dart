@@ -54,7 +54,7 @@ class GeminiApiService {
         : null;
     if (dosageJson == null) return rawNodeJson;
 
-    final rawTimingsList = dosageJson['timings'] as List ?? [];
+    final rawTimingsList = dosageJson['timings'] as List;
     final List<int> resolvedMinutesList = [];
 
     for (var rawTimingsMap in rawTimingsList) {

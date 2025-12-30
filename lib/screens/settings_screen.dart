@@ -187,13 +187,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle: const Text('Play a 5-second sample at current volume'),
                 onTap: () async {
                   final volume = _settingsService.getVolume();
+                  final hasVibrate = _settingsService.getVibrate();
 
                   final alarmSettings = AlarmSettings(
                     id: alarmTestID,
                     dateTime: DateTime.now().add(const Duration(seconds: 1)),
                     assetAudioPath: 'assets/alarm.wav',
                     loopAudio: false,
-                    vibrate: true,
+                    vibrate: hasVibrate,
                     volumeSettings: VolumeSettings.fixed(
                       volume: volume,
                       volumeEnforced: true,
