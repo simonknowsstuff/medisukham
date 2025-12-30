@@ -298,6 +298,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               _buildTimingsList(),
 
+              ListTile(
+                leading: const Icon(Icons.restore),
+                title: const Text('Reset'),
+                subtitle: const Text('Reset default dosage timings'),
+                onTap: () async {
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Reset Timings?'),
+                      content: const Text('This will set all your default dosage timings to their original defaults'),
+                      actions: <TextButton>[
+                        TextButton(
+                          child: const Text('Cancel'),
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Reset'),
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                        ),
+                      ]
+                    ),
+                  );
+
+                  if (confirm == true) {
+                    await _settingsService.resetTimings();
+                  }
+                },
+              ),
+
               // SECTION 3: GENERAL & ABOUT
               const Padding(
                 padding: EdgeInsets.fromLTRB(16, 24, 16, 8),

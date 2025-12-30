@@ -66,6 +66,12 @@ class SettingsService extends ChangeNotifier {
     return TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
   }
 
+  Future<void> resetTimings() async {
+    _timings = Map.from(_defaultTimings);
+    notifyListeners();
+    await _prefs.setString(_keyTimingsMap, jsonEncode(_timings));
+  }
+
   // Auto-Cleanup:
   bool getAutoCleanup() {
     return _autoCleanup;
