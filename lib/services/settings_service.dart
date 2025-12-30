@@ -34,8 +34,13 @@ class SettingsService extends ChangeNotifier {
 
     final String? jsonString = await _prefs.getString(_keyTimingsMap);
     if (jsonString != null) {
-      final decoded = jsonDecode(jsonString);
-      _timings = decoded.map((k, v) => MapEntry(k, v as int));
+      final dynamic decoded = jsonDecode(jsonString); // Decode as dynamic map
+
+      if (decoded is Map) {
+        _timings = decoded.map((key, value) {
+          return MapEntry(key.toString(), value as int); // Cast entries to <String, int>
+        });
+      }
     } else {
       _timings = Map.from(_defaultTimings);
     }

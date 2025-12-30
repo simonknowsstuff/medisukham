@@ -15,6 +15,7 @@ Future<void> main() async {
 
   // Initialise settings
   final settingsService = SettingsService();
+  await settingsService.init();
 
   // Initialise Gemini API Service
   GeminiApiService.initialize(settingsService);
