@@ -345,12 +345,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
 
               // Privacy Policy
-              ListTile(
-                leading: const Icon(Icons.privacy_tip),
-                title: const Text('Privacy Policy'),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () => _launchUrl('https://your-app-privacy-policy.com'),
-              ),
+              // ListTile(
+              //   leading: const Icon(Icons.privacy_tip),
+              //   title: const Text('Privacy Policy'),
+              //   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              //   onTap: () => _launchUrl('https://your-app-privacy-policy.com'),
+              // ),
 
               // App Version
               const AboutListTile(
